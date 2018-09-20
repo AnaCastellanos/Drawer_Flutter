@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'drawer.dart';
 
 class App extends StatefulWidget{
   @override
@@ -6,31 +7,38 @@ class App extends StatefulWidget{
 }
 
 class _AppState extends State<App> {
-  List<DropdownMenuItem<int>> listDrop = [];
-  String selected;
+  List<DropdownMenuItem<String>> listDrop = [];
+  List<String> drop = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  String selected = null;
 
   void loadData() {
     listDrop = [];
-    listDrop.add(DropdownMenuItem(child: Text('Item 1'), value: 1));
-    listDrop.add(DropdownMenuItem(child: Text('Item 2'), value: 2));
-    listDrop.add(DropdownMenuItem(child: Text('Item 3'), value: 3));
+    listDrop = drop.map((val) => DropdownMenuItem<String>(
+      child: Text(val), value: val,)).toList();
   } 
+
+  void _onChanged(String value){
+    setState(() {
+          selected = value;
+    });
+  }
 
   @override
   Widget build(context){
     loadData();
     return Scaffold(
-      appBar: AppBar(title: Text('Home'),),
+      appBar: AppBar(
+        title: Text('Home'),
+      ),
+      drawer: MyDrawer(),
       body: Center(
         child: DropdownButton(
+          value: selected,
           hint: Text('Select'),
           iconSize: 40.0,
           elevation: 5,
           onChanged: (value) {
-            selected = value;
-            setState(() {
-                        
-              });
+            _onChanged(value);
           },
           items: listDrop,
         )
